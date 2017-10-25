@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApplication1
 {
@@ -10,14 +11,29 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            Pessoa v = new Pessoa("Rander", "Leal", 20, "278.064.726-49");
-            bool valido = v.validar();            
-            if (valido)
+            Console.WriteLine("\t\t\t === Validador de CPF === \n");
+
+            Console.Write("Insira seu primeiro nome: ");
+            string nome = Console.ReadLine();
+
+            Console.Write("\nInsira seu sobrenome: ");
+            string sobrenome = Console.ReadLine();
+
+            Console.Write("\nInsira sua idade: ");
+            int idade = int.Parse(Console.ReadLine());
+
+            Console.Write("\nInsira seu CPF: ");
+            string cpf = Console.ReadLine();
+
+            Pessoa pessoa = new Pessoa(nome, sobrenome, idade, cpf);
+
+            if (pessoa.ValidarCPF())
                 Console.WriteLine("CPF VÁLIDO!");
             else
                 Console.WriteLine("CPF INVÁLIDO!");
-            Console.ReadKey();
 
+            Console.Write("Programa finalizado, tecle algo para fechar...");
+            Console.ReadKey();
         }
     }
 
@@ -48,7 +64,7 @@ namespace ConsoleApplication1
             return (idade);
         }
         public string Cpf()
-        {           
+        {
             return (cpf);
         }
 
@@ -87,9 +103,13 @@ namespace ConsoleApplication1
                 valido = true;
         }
 
-        public bool validar()
+        public bool ValidarCPF()
         {
-            this.cpf = System.Text.RegularExpressions.Regex.Replace(this.cpf, "[^0-9]+", "");
+            this.cpf = Regex.Replace(this.cpf, "[^0-9]+", "");
+
+            if (Regex.IsMatch(this.cpf, "(^0+$|^1+$|^2+$|^3+$|^4+$|^5+$|^6+$|^7+$|^8+$|^9+$)", RegexOptions.Multiline))
+                return false;
+
             if (this.cpf.Length == 11)
             {
                 int[] cpf = new int[11];
